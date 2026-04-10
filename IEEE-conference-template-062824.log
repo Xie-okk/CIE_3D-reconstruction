@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.1.8)  9 APR 2026 18:57
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.1.8)  10 APR 2026 13:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -237,12 +237,29 @@ LaTeX Font Info:    Trying to load font information for T1+ptm on input line 11
 (d:/texlive/2025/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 ))
+(d:/texlive/2025/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+
+(d:/texlive/2025/texmf-dist/tex/latex/tools/array.sty
+Package: array 2024/10/17 v2.6g Tabular extension package (FMi)
+\col@sep=\dimen177
+\ar@mcellbox=\box56
+\extrarowheight=\dimen178
+\NC@list=\toks24
+\extratabsurround=\skip59
+\backup@length=\skip60
+\ar@cellbox=\box57
+)
+\rotheadsize=\dimen179
+\c@nlinenum=\count290
+\TeXr@lab=\toks25
+)
 (d:/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
 File: l3backend-xetex.def 2024-05-08 L3 backend support: XeTeX
-\g__graphics_track_int=\count290
-\l__pdf_internal_box=\box56
-\g__pdf_backend_annotation_int=\count291
-\g__pdf_backend_link_int=\count292
+\g__graphics_track_int=\count291
+\l__pdf_internal_box=\box58
+\g__pdf_backend_annotation_int=\count292
+\g__pdf_backend_link_int=\count293
 )
 (./IEEE-conference-template-062824.aux)
 \openout1 = `IEEE-conference-template-062824.aux'.
@@ -294,13 +311,23 @@ File: fig_coordinate.png Graphic file (type bmp)
 File: fig_radar_los.png Graphic file (type bmp)
 <fig_radar_los.png>
 
-Overfull \hbox (3.19778pt too wide) in paragraph at lines 204--227
+Overfull \hbox (5.19775pt too wide) in paragraph at lines 205--228
  [][] 
  []
 
 
 
-(./IEEE-conference-template-062824.bbl)
+
+Overfull \hbox (3.39363pt too wide) in paragraph at lines 259--267
+ [][] 
+ []
+
+
+
+[3]
+File: imgResult_rotation2026-04-10-11-49.png Graphic file (type bmp)
+<imgResult_rotation2026-04-10-11-49.png>
+ (./IEEE-conference-template-062824.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -314,7 +341,11 @@ Before submitting the final camera ready copy, remember to:
 
 
 
-[3] (./IEEE-conference-template-062824.aux)
+
+
+[4
+
+] [5] (./IEEE-conference-template-062824.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -325,12 +356,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 4209 strings out of 475796
- 64762 string characters out of 5774034
- 465423 words of memory out of 5000000
- 27096 multiletter control sequences out of 15000+600000
+ 4454 strings out of 475796
+ 68196 string characters out of 5774034
+ 470569 words of memory out of 5000000
+ 27333 multiletter control sequences out of 15000+600000
  650330 words of font info for 139 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 57i,20n,65p,770b,336s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,20n,65p,770b,334s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on IEEE-conference-template-062824.pdf (3 pages).
+Output written on IEEE-conference-template-062824.pdf (5 pages).

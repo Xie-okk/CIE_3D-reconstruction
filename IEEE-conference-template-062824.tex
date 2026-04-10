@@ -17,7 +17,7 @@
 %\usepackage{booktabs}
 \usepackage{multirow}
 \usepackage[T1]{fontenc}
-
+\usepackage{makecell}
 
 \begin{document}
 
@@ -60,6 +60,7 @@ ISAR, asteroid, rotation parameter estimation, 3D reconstruction.
 
 \section{Introduction}
 This document is a model and instructions for \LaTeX.
+
 
 \section{Ground-Based Radar Observation Geometry and Signal Model}
 
@@ -186,7 +187,7 @@ The ground-based radar operates in the X-band with a center frequency of 9.6~GHz
 
 The asteroid rotation parameters are configured as follows: the spin period is 9.0~h (32,400~s). The rotation axis orientation is specified in the ecliptic coordinate system with longitude $\lambda=23.3^{\circ}$ and latitude $\beta=45.0^{\circ}$. The initial rotation phase is set to $\phi_0=60.0^{\circ}$.
 
-To account for realistic radar receiver characteristics, a noise model is incorporated into the simulated ISAR intensity images. A constant additive thermal noise floor is globally injected across all observation epochs to simulate a realistic ground-based radar system. The noise power is calibrated such that the peak signal-to-noise ratio (SNR) across the entire observation sequence is 16~dB.
+To account for realistic radar receiver characteristics, a noise model is incorporated into the simulated ISAR intensity images. A constant additive thermal noise floor is globally injected across all observation epochs to simulate a realistic ground-based radar system. The noise power is calibrated such that the peak signal-to-noise ratio (SNR) across the entire observation sequence is 8~dB.
 
 To simulate a realistic observation trajectory, the time-varying geometry is derived from the 2027 flyby ephemeris of asteroid 1999~AN10. A total of 18 ISAR frames are generated over two distinct observation epochs: $t \in [0, 8]$~h and $t \in [59.2, 67.2]$~h. Each epoch provides 9 uniformly sampled frames at 1-hour intervals. This dual-epoch scheme ensures sufficient geometric diversity to mitigate self-occlusion effects. To intuitively illustrate this, the corresponding radar LOS directions in the asteroid intrinsic coordinate system are plotted in Fig.~\ref{fig_radar_los}. The simulation parameters are summarized in Table~\ref{tab_sim_params}.
 
@@ -200,7 +201,7 @@ To simulate a realistic observation trajectory, the time-varying geometry is der
 	\caption{Key Parameters of the ISAR Simulation}
 	\label{tab_sim_params}
 	\centering
-	\renewcommand{\arraystretch}{1.1} % 增加行高，使垂直居中更美观
+	\renewcommand{\arraystretch}{1.2} % 增加行高，使垂直居中更美观
 	\begin{tabular}{|c|l|c|c|}
 		\hline
 		% 四个表头全部强制居中并加粗
@@ -222,13 +223,59 @@ To simulate a realistic observation trajectory, the time-varying geometry is der
 		
 		\multirow{3}{*}{Observation} & Observation epochs & $N_{ep}$ & 2 \\ \cline{2-4} 
 		& Total frames & $N_{fr}$ & 18 \\ \cline{2-4} 
-		& SNR & $SNR$ & 16~dB \\ \hline
+		& SNR & $SNR$ & 8~dB \\ \hline
 	\end{tabular}
 \end{table}
 
 \subsection{Rotation Parameter Estimation Results}
 
+Based on the ISAR image envelopes, the dimensions of the reference triaxial ellipsoid are pre-estimated as $a=20$~m, $b=10$~m, and $c=10$~m. With this geometric baseline, the estimation process is initiated via a wide-bound blind search with all attitude parameters initialized to zero. The optimization aims to minimize the proposed envelope-based cost function to lock onto the kinematic state, with the results of a representative initial run summarized in Table~\ref{tab_estimation_results}.
 
+\begin{table}[htbp]
+	\caption{Comparison of True and Initially Estimated Rotation Parameters}
+	\label{tab_estimation_results}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\textbf{Symbol} & \textbf{Bounds} & \textbf{Initial} & \textbf{Truth} & \textbf{Estimated} & \textbf{Error} \\ \hline
+		$T$ (h) & $[8.0, 12.0]$ & 8.00 & 9.00 & 8.99 & 0.01 \\ \hline
+		$\lambda$ ($^{\circ}$) & $[0, 360]$ & 0.0 & 23.3 & 17.2 & 6.1 \\ \hline
+		$\beta$ ($^{\circ}$) & $[-90, 90]$ & 0.0 & 45.0 & 55.1 & 10.1 \\ \hline
+		$\phi_0$ ($^{\circ}$) & $[0, 180]$ & 0.0 & 60.0 & 67.3 & 7.3 \\ \hline
+	\end{tabular}
+\end{table}
+
+As shown in Table~\ref{tab_estimation_results}, the algorithm accurately captures the spin period $T$, even under severe noise. However, the pole latitude $\beta$ shows a deviation of $10.1^{\circ}$. This is a typical "modeling error" where the optimization compensates for the morphological mismatch between the triaxial ellipsoid model and the asymmetric asteroid by slightly tilting the observation perspective.
+
+To evaluate estimation stability, multiple independent blind searches were conducted within a narrowed constraint interval for $T$ (Table~\ref{tab_stability_comparison}). While $T$ and $\phi_0$ remain stable, the pole directions ($\lambda, \beta$) exhibit significant variance. This ill-posedness is driven by the 59.2-hour observation gap, where micro-errors in $T$ accumulate into phase drifts, forcing the algorithm into various compensatory local minima.
+
+\begin{table}[htbp]
+	\caption{Comparison of Estimation Stability: Blind Search vs. Prior Spin Period}
+	\label{tab_stability_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\setlength{\tabcolsep}{8pt} % 适当增加列间距，让表格看起来更舒展
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Symbol} & \textbf{Truth} & \textbf{Blind Search (Mean $\pm$ Std.)} & \textbf{Fixed Period} \\ \hline
+		$T$ (h) & 9.00 & $8.99 \pm 0.02$ & \textbf{9.00} \\ \hline
+		$\lambda$ ($^{\circ}$) & 23.3 & $19.9 \pm 7.1$ & \textbf{20.6} \\ \hline
+		$\beta$ ($^{\circ}$) & 45.0 & $58.1 \pm 8.2$ & \textbf{47.0} \\ \hline
+		$\phi_0$ ($^{\circ}$) & 60.0 & $66.7 \pm 0.8$ & \textbf{60.3} \\ \hline
+	\end{tabular}
+\end{table}
+
+In practical missions, the spin period is often known from optical lightcurves. By introducing this prior ($T = 9.00$~h), the phase drift is eliminated. As shown in Table~\ref{tab_stability_comparison}, this constraint forces the algorithm out of the compensatory minima, reducing the $\beta$ error to only $2.0^{\circ}$. This configuration provides a robust initialization for the subsequent 3D shape deformation.
+
+To qualitatively evaluate the final kinematic estimation, the simulated 2D ISAR projections based on the prior-constrained parameters are compared with the ground truth in Fig.~\ref{fig_disp_full_width}. The rotation rhythm and orientation of the simulated envelopes are highly consistent with the observations, validating the estimated kinematic parameters. However, the noticeable "structural gap" between the ellipsoid and the actual shape provides the necessary residual information for the subsequent shape deformation.
+
+\begin{figure*}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{imgResult_rotation2026-04-10-11-49.png}
+	\caption{Comparison of observed and simulated ISAR images (36 frames in total). Rows 1 and 3 display the ground truth ISAR projections for Epoch 1 (Frames 1--9) and Epoch 2 (Frames 10--18), respectively. Rows 2 and 4 show the corresponding simulations of the initial ellipsoid model using the prior-constrained rotation parameters.}
+	\label{fig_disp_full_width}
+\end{figure*}
 
 \subsection{Shape Parameter Inversion Results}
 
